@@ -1,9 +1,4 @@
-IF DB_ID(N'MIST460_RelationalDatabase_Lastname') IS NULL
-    CREATE DATABASE MIST460_RelationalDatabase_Lastname;
-GO
-
-USE MIST460_RelationalDatabase_Lastname;
-GO
+use MIST460_RelationalDatabase_Lastname;
 
 -- Safety drops (order matters due to FKs)
 IF OBJECT_ID('AlumJob')        IS NOT NULL DROP TABLE AlumJob;
@@ -87,6 +82,7 @@ CREATE TABLE Course (
     CourseDescription     NVARCHAR(MAX)  NULL,
     Credits         DECIMAL(4,1)   NOT NULL CONSTRAINT DF_Course_Credits DEFAULT (3.0),
 	MajorsOnlyRequirement bit not null,
+	RecommendedCapacity int not null default(0),
     CONSTRAINT UQ_Course_SubjectNumber UNIQUE (SubjectCode, CourseNumber),
     CONSTRAINT CK_Course_Credits CHECK (Credits > 0 AND Credits <= 12.0)
 );
