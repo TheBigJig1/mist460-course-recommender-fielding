@@ -12,13 +12,30 @@ Password: Str0ng#Pass2025
 Database Name: (leave blank for default master, or specify once you create one, e.g. MyAppDB)
 Encrypt: Yes / True (recommended; if connection fails, set Encrypt = True and Trust Server Cert = True)
 
+
+----- I think obselete -----
 neo4j
 in browser: http://localhost:7474/browser/
 Username: neo4j
 Password: Str0ng#Pass2025
+----- I think obselete -----
+
 
 ➜ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Str0ng#Pass2025" \   
    -p 1433:1433 --name sql2022 \
    -d mcr.microsoft.com/mssql/server:2022-latest
 
 ➜ docker start sql2022
+
+
+python -m venv .venv
+source .venv/bin/activate  
+pip install uv
+uv init
+uv add fastapi
+uv add uvicorn
+uv add pyodbc
+mkdir web_apis
+
+cd web_apis
+uvicorn course_recommender_apis:app --reload
