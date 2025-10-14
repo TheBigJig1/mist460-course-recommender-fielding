@@ -1,0 +1,24 @@
+⌘⇧P → MS SQL: Connect → Server localhost, Port 1433
+
+Open Connection Dialogue:
+
+Profile Name: Local SQL Server (Docker)
+Connection Group: Local (or leave blank)
+Server name: localhost,1433 (you can also just use localhost since port 1433 is default)
+Trust server cert: Yes / True (container uses a self‑signed cert)
+Authentication Type: SQL Login
+Username: SA
+Password: Str0ng#Pass2025
+Database Name: (leave blank for default master, or specify once you create one, e.g. MyAppDB)
+Encrypt: Yes / True (recommended; if connection fails, set Encrypt = True and Trust Server Cert = True)
+
+neo4j
+in browser: http://localhost:7474/browser/
+Username: neo4j
+Password: Str0ng#Pass2025
+
+➜ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Str0ng#Pass2025" \   
+   -p 1433:1433 --name sql2022 \
+   -d mcr.microsoft.com/mssql/server:2022-latest
+
+➜ docker start sql2022
