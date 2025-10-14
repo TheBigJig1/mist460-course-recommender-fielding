@@ -1,3 +1,4 @@
+------- Connect to SQL server from vscode -------
 ⌘⇧P → MS SQL: Connect → Server localhost, Port 1433
 
 Open Connection Dialogue:
@@ -18,16 +19,15 @@ neo4j
 in browser: http://localhost:7474/browser/
 Username: neo4j
 Password: Str0ng#Pass2025
------ I think obselete -----
 
-
+------- Setup for SQL Server in Docker -------
 ➜ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=Str0ng#Pass2025" \   
    -p 1433:1433 --name sql2022 \
    -d mcr.microsoft.com/mssql/server:2022-latest
 
 ➜ docker start sql2022
 
-
+------- Setup for Python Env and FastAPI -------
 python -m venv .venv
 source .venv/bin/activate  
 pip install uv
@@ -39,3 +39,13 @@ mkdir web_apis
 
 cd web_apis
 uvicorn course_recommender_apis:app --reload
+
+------- Had to run -------
+# unixODBC (provides libodbc.2.dylib)
+brew update
+brew install unixodbc
+
+# Microsoft ODBC Driver 18 for SQL Server
+brew tap microsoft/mssql-release https://github.com/Microsoft/homebrew-mssql-release
+brew update
+ACCEPT_EULA=Y brew install msodbcsql18 mssql-tools

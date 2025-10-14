@@ -13,10 +13,10 @@ if __name__ == "__main__":
 
 # Database connection parameters
 DB_SERVER   = 'localhost,1433'
-DB_DATABASE = 'MyAppDB'
+DB_DATABASE = 'MIST460_RelationalDatabase_Lastname'
 DB_USER     = 'SA'
 DB_PASSWORD = 'Str0ng#Pass2025'
-DB_DRIVER   = 'ODBC Driver 17 for SQL Server'
+DB_DRIVER   = 'ODBC Driver 18 for SQL Server'
 
 def get_db_connection():
     try:
@@ -53,9 +53,9 @@ def find_current_semester_course_offerings(subject_code: str, course_number: str
             "SubjectCode": row.SubjectCode,
             "CourseNumber": row.CourseNumber,
             "CRN": row.CRN,
-            "Semester": row.Semester,
-            "Year": row.Year,
             "CourseOfferingID": row.CourseOfferingID,
+            "CourseOfferingSemester": row.CourseOfferingSemester,
+            "CourseOfferingYear": row.CourseOfferingYear,
             "NumberSeatsRemaining": row.NumberSeatsRemaining
         }
         for row in rows
