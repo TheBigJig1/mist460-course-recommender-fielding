@@ -2,7 +2,8 @@ from fastapi import FastAPI, HTTPException
 # from pydantic import BaseModel
 import pyodbc
 
-app = FastAPI()
+# Swagger UI
+app = FastAPI(docs_url="/", redoc_url=None)
 
 def main():
     import uvicorn
