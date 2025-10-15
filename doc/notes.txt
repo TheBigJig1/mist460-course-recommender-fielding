@@ -49,3 +49,12 @@ brew install unixodbc
 brew tap microsoft/mssql-release https://github.com/Microsoft/homebrew-mssql-release
 brew update
 ACCEPT_EULA=Y brew install msodbcsql18 mssql-tools
+
+
+------- To Run -------
+# Start the SQL Server container
+docker start sql2022
+# Activate the Python virtual environment
+source .venv/bin/activate
+# Run the FastAPI application
+uvicorn web_apis.course_recommender_apis:app --reload
