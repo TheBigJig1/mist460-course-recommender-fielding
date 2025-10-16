@@ -1,16 +1,17 @@
-from web_apis.course_recommender_apis import get_db_connection
+from fastapi import HTTPException
+from web_apis.get_db_connection import get_db_connection
 
 def find_current_semester_course_offerings(subject_code: str, course_number: str):
     # Connect to the database
     conn = get_db_connection()
     cursor = conn.cursor()
-
+    
     # Ensure the connection was successful
     if not conn:
         raise HTTPException(status_code=500, detail="Database connection failed")
 
     # Execute the stored procedure
-    cursor.execute("{CALL procFindCurrentSemesterCourseOfferings(?, ?)}", (subject_code, course_number))
+    cursor.execute("{CALL procFindCurrentSemesterCourseOfferingsForSpecifiedCourse(?, ?)}", (subject_code, course_number))
     rows = cursor.fetchall()
 
     # Close the connection

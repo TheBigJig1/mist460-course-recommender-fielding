@@ -1,6 +1,11 @@
 from fastapi import FastAPI, HTTPException
-# from pydantic import BaseModel
-import pyodbc
+from web_apis.validate_user import validate_user
+from web_apis.find_current_semester_course_offerings import find_current_semester_course_offerings
+from web_apis.find_prerequisites import find_prerequisites
+from web_apis.check_if_student_has_taken_all_prerequisites_for_course import check_if_student_has_taken_all_prerequisites_for_course
+from web_apis.enroll_student_in_course_offering import enroll_student_in_course_offering
+from web_apis.get_student_enrolled_in_course_offerings import get_student_enrolled_in_course_offerings
+from web_apis.drop_student_from_course_offering import drop_student_from_course_offering
 
 # Swagger UI
 app = FastAPI(docs_url="/", redoc_url=None)
@@ -12,54 +17,30 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Database connection parameters
-DB_SERVER   = 'localhost,1433'
-DB_DATABASE = 'MIST460_RelationalDatabase_Lastname'
-DB_USER     = 'SA'
-DB_PASSWORD = 'Str0ng#Pass2025'
-DB_DRIVER   = 'ODBC Driver 18 for SQL Server'
+@app.get("/validate_user/")
+def validate_user_api(username: str, password: str):
+    return validate_user(username, password)
 
-def get_db_connection():
-    try:
-        conn_str = f'DRIVER={{{DB_DRIVER}}};SERVER={DB_SERVER};DATABASE={DB_DATABASE};UID={DB_USER};PWD={DB_PASSWORD}'
-        return pyodbc.connect(conn_str)
-    
-    except Exception as e:
-        print(f"Error connecting to database: {e}")
-        raise HTTPException(status_code=500, detail="Database connection failed")
+@app.get("/find_current_semester_course_offerings/")
+def find_current_semester_course_offerings_api(subjectCode: str, courseNumber: str):
+    return find_current_semester_course_offerings(subjectCode, courseNumber)
 
-    return None
+@app.get("/find_prerequisites/")
+def find_prerequisites_api(subjectCode: str, courseNumber: str):
+    return find_prerequisites(subjectCode, courseNumber)
 
-@app.get("/find_current_semester_course_offerings")
-def find_current_semester_course_offerings(subject_code: str, course_number: str):
-    # Connect to the database
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    # Ensure the connection was successful
-    if not conn:
-        raise HTTPException(status_code=500, detail="Database connection failed")
+@app.get("/check_if_student_has_taken_all_prerequisites_for_course/")
+def check_if_student_has_taken_all_prerequisites_for_course_api(studentID: int, subjectCode: str, courseNumber: str):
+    return check_if_student_has_taken_all_prerequisites_for_course(studentID, subjectCode, courseNumber)
 
-    # Execute the stored procedure
-    cursor.execute("{CALL procFindCurrentSemesterCourseOfferingsForSpecifiedCourse(?, ?)}", (subject_code, course_number))
-    rows = cursor.fetchall()
+@app.get("/enroll_student_in_course_offering/")
+def enroll_student_in_course_offering_api(studentID: int, courseOfferingID: int):
+    return enroll_student_in_course_offering(studentID, courseOfferingID)
 
-    # Close the connection
-    cursor.close()
-    conn.close()
+@app.get("/get_student_enrolled_in_course_offerings/")
+def get_student_enrolled_in_course_offerings_api(studentID: int):
+    return get_student_enrolled_in_course_offerings(studentID)
 
-    # Convert rows to a list of dictionaries for better JSON serialization
-    results = [
-        {
-            "SubjectCode": row.SubjectCode,
-            "CourseNumber": row.CourseNumber,
-            "CRN": row.CRN,
-            "CourseOfferingID": row.CourseOfferingID,
-            "CourseOfferingSemester": row.CourseOfferingSemester,
-            "CourseOfferingYear": row.CourseOfferingYear,
-            "NumberSeatsRemaining": row.NumberSeatsRemaining
-        }
-        for row in rows
-    ]
-
-    return {"data": results}
+@app.get("/drop_student_from_course_offering/")
+def drop_student_from_course_offering_api(studentID: int, courseOfferingID: int):
+    return drop_student_from_course_offering(studentID, courseOfferingID)
